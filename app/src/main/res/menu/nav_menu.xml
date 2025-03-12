@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_insertar"
+            android:icon="@drawable/ic_insertar"
+            android:title="Insertar" />
+        <item
+            android:id="@+id/nav_mostrar"
+            android:icon="@drawable/ic_mostrar"
+            android:title="Mostrar" />
+        <item
+            android:id="@+id/nav_actualizar"
+            android:icon="@drawable/ic_actualizar"
+            android:title="Actualizar" />
+    </group>
+</menu>

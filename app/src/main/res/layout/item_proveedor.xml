@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Botón de basura -->
+
+        <ImageButton
+            android:id="@+id/btnEliminar"
+            android:layout_width="wrap_content"
+            android:layout_height="91dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="96dp"
+            android:layout_marginEnd="1dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Eliminar"
+            android:padding="8dp"
+            android:src="@drawable/delete" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toStartOf="@id/btnEliminar"
+        android:layout_alignParentStart="true">
+
+        <!-- Nombre del Proveedor -->
+        <TextView
+            android:id="@+id/tvNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre:"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- RFC -->
+        <TextView
+            android:id="@+id/tvRFC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RFC:"
+            android:layout_marginTop="4dp" />
+
+        <!-- Dirección -->
+        <TextView
+            android:id="@+id/tvDireccion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dirección:"
+            android:layout_marginTop="4dp" />
+
+        <!-- Teléfono -->
+        <TextView
+            android:id="@+id/tvTelefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Teléfono:"
+            android:layout_marginTop="4dp" />
+
+        <!-- Email -->
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email:"
+            android:layout_marginTop="4dp" />
+
+        <!-- Contacto -->
+        <TextView
+            android:id="@+id/tvContacto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contacto:"
+            android:layout_marginTop="4dp" />
+
+        <!-- Producto Principal -->
+        <TextView
+            android:id="@+id/tvProductoPrincipal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Producto Principal:"
+            android:layout_marginTop="4dp" />
+
+        <!-- Estado -->
+        <TextView
+            android:id="@+id/tvEstado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estado:"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
+</RelativeLayout>
+    </androidx.cardview.widget.CardView>
