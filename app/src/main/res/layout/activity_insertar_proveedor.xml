@@ -24,11 +24,13 @@
                 android:layout_height="wrap_content"
                 android:hint="Nombre del proveedor"
                 app:boxStrokeWidth="1dp"
+                android:inputType="text"
                 app:boxStrokeColor="@color/purple_500">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNombre"
                     android:layout_width="match_parent"
+                    android:inputType="text"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -39,11 +41,13 @@
                 android:layout_height="wrap_content"
                 android:hint="RFC"
                 app:boxStrokeWidth="1dp"
+                android:inputType="text"
                 app:boxStrokeColor="@color/purple_500">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etRFC"
                     android:layout_width="match_parent"
+                    android:inputType="text"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -54,11 +58,13 @@
                 android:layout_height="wrap_content"
                 android:hint="Dirección"
                 app:boxStrokeWidth="1dp"
+                android:inputType="text"
                 app:boxStrokeColor="@color/purple_500">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etDireccion"
                     android:layout_width="match_parent"
+                    android:inputType="text"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Teléfono"
                 app:boxStrokeWidth="1dp"
+                android:inputType="text"
                 app:boxStrokeColor="@color/purple_500">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -84,6 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
+                android:inputType="text"
                 app:boxStrokeWidth="1dp"
                 app:boxStrokeColor="@color/purple_500">
 
@@ -101,11 +109,13 @@
                 android:layout_height="wrap_content"
                 android:hint="Contacto"
                 app:boxStrokeWidth="1dp"
+                android:inputType="text"
                 app:boxStrokeColor="@color/purple_500">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etContacto"
                     android:layout_width="match_parent"
+                    android:inputType="text"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,6 +124,7 @@
                 android:id="@+id/tilProductoPrincipal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="text"
                 android:hint="Producto Principal"
                 app:boxStrokeWidth="1dp"
                 app:boxStrokeColor="@color/purple_500">
@@ -121,6 +132,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etProductoPrincipal"
                     android:layout_width="match_parent"
+                    android:inputType="text"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -133,10 +145,11 @@
                 app:boxStrokeWidth="1dp"
                 app:boxStrokeColor="@color/purple_500">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etEstado"
+                <Spinner
+                    android:id="@+id/spinnerEstado"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/purple_500"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Botón de Guardar -->
