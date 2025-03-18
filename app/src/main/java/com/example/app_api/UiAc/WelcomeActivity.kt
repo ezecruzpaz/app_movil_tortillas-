@@ -76,7 +76,7 @@ class WelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
         call.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
-                    token = response.body()?.access_token
+                    token = response.body()?.accessToken
                     if (!token.isNullOrEmpty()) {
                         obtenerProveedores(token!!)
                     } else {
