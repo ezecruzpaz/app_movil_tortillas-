@@ -100,9 +100,36 @@ class MainActivity : AppCompatActivity() {
         call.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
-                    procesarRespuestaExitosa(response.body())
+                    val token = response.body()?.access_token
+                    if (!token.isNullOrEmpty()) {
+                        mostrarExito(token)
+                    } else {
+                        mostrarError("Token vacío o nulo. Revisa la API.")
+                    }
                 } else {
-                    procesarError(response)
+                    // Manejar errores de la API
+                    val errorBody = response.errorBody()?.string()
+                    val mensajeError = if (!errorBody.isNullOrEmpty()) {
+                        try {
+                            val jsonObject = JSONObject(errorBody)
+                            val detail = jsonObject.getString("detail")
+
+                            when {
+                                detail.contains("usuario", ignoreCase = true) -> {
+                                    "Usuario incorrecto. Verifica tu nombre de usuario."
+                                }
+                                detail.contains("contraseña", ignoreCase = true) -> {
+                                    "Contraseña incorrecta. Verifica tu contraseña."
+                                }
+                                else -> detail
+                            }
+                        } catch (e: Exception) {
+                            "Error en la respuesta: $errorBody"
+                        }
+                    } else {
+                        "Error en la respuesta: ${response.code()}"
+                    }
+                    mostrarError(mensajeError)
                 }
             }
 
@@ -111,41 +138,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-
-    private fun procesarRespuestaExitosa(responseBody: LoginResponse?) {
-        val token = responseBody?.access_token
-        if (!token.isNullOrEmpty()) {
-            mostrarExito(token)
-        } else {
-            mostrarError("Token vacío o nulo. Revisa la API.")
-        }
-    }
-
-    private fun procesarError(response: Response<LoginResponse>) {
-        val errorBody = response.errorBody()?.string()
-        val mensajeError = if (!errorBody.isNullOrEmpty()) {
-            obtenerMensajeError(errorBody)
-        } else {
-            "Error en la respuesta: ${response.code()}"
-        }
-        mostrarError(mensajeError)
-    }
-
-    private fun obtenerMensajeError(errorBody: String): String {
-        return try {
-            val jsonObject = JSONObject(errorBody)
-            val detail = jsonObject.getString("detail")
-
-            when {
-                detail.contains("usuario", ignoreCase = true) -> "Usuario incorrecto. Verifica tu nombre de usuario."
-                detail.contains("contraseña", ignoreCase = true) -> "Contraseña incorrecta. Verifica tu contraseña."
-                else -> detail
-            }
-        } catch (e: Exception) {
-            "Error en la respuesta: $errorBody"
-        }
-    }
-
 
     private fun mostrarExito(token: String) {
         SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
