@@ -7,8 +7,16 @@ interface MicroservicioApi {
     @POST("auth/login")
     fun login(@Body request: LoginRequest): Call<LoginResponse>
 
+    // Obtener todos los proveedores
     @GET("proveedores")
     fun obtenerProveedores(@Header("Authorization") token: String): Call<ProveedorResponse>
+
+    // Obtener un proveedor específico por ID
+    @GET("proveedores/{id}")
+    fun obtenerProveedor(
+        @Header("Authorization") token: String,
+        @Path("id") proveedorId: String
+    ): Call<Proveedor>
 
     @POST("proveedores")
     fun insertarProveedor(
@@ -19,7 +27,7 @@ interface MicroservicioApi {
     @PUT("proveedores/{id}")
     fun actualizarProveedor(
         @Header("Authorization") token: String,
-        @Path("id") id: Int,
+        @Path("id") id: String,
         @Body proveedor: Proveedor
     ): Call<Proveedor>
 

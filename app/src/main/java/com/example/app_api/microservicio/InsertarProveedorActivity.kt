@@ -247,10 +247,7 @@ class InsertarProveedorActivity : AppCompatActivity(), NavigationView.OnNavigati
                 val intent = Intent(this, WelcomeActivity::class.java)
                 startActivity(intent)
             }
-            R.id.nav_actualizar -> {
-                val intent = Intent(this, ActualizarProveedorActivity::class.java)
-                startActivity(intent)
-            }
+
         }
 
         // Cerrar el menú lateral después de seleccionar una opción

@@ -1,6 +1,5 @@
 package com.example.app_api.ui
 
-
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -8,6 +7,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -55,7 +55,7 @@ class WelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
         recyclerView = findViewById(R.id.rvProveedores)
 
         // Ocultar el TextView de bienvenida
-        tvBienvenida.visibility = View.GONE // <-- Ocultar el mensaje de bienvenida
+        tvBienvenida.visibility = View.GONE
 
         // Configurar RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -65,7 +65,7 @@ class WelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
         navigationView.setNavigationItemSelectedListener(this)
 
         // Iniciar sesión y cargar proveedores
-        iniciarSesionMicroservicio() // <-- Esto cargará los proveedores automáticamente
+        iniciarSesionMicroservicio()
     }
 
     private fun iniciarSesionMicroservicio() {
@@ -77,7 +77,7 @@ class WelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
                 if (response.isSuccessful) {
                     token = response.body()?.access_token
                     if (!token.isNullOrEmpty()) {
-                        obtenerProveedores(token!!) // <-- Cargar proveedores después del login
+                        obtenerProveedores(token!!)
                     } else {
                         mostrarError("Token vacío o nulo")
                     }
@@ -102,12 +102,7 @@ class WelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
                     obtenerProveedores(it)
                 } ?: mostrarError("Error: No se recibió el token.")
             }
-            R.id.nav_actualizar -> {
-                abrirActualizarProveedor()
-            }
         }
-
-        // Cerrar el menú lateral después de seleccionar una opción
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
@@ -136,46 +131,62 @@ class WelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
     }
 
     private fun mostrarProveedores(proveedores: List<Proveedor>) {
-        val adapter = ProveedorAdapter(proveedores) { proveedor ->
-            // Usar !! para convertir Int? a Int
-            eliminarProveedor(proveedor.id_proveedor!!)
-        }
+        val adapter = ProveedorAdapter(
+            proveedores = proveedores,
+            onEliminarClickListener = { proveedor ->
+                eliminarProveedor(proveedor.id_proveedor!!)
+            },
+            onActualizarClickListener = { proveedor ->
+                abrirFormularioActualizar(proveedor)
+            }
+        )
         recyclerView.adapter = adapter
     }
+
+    private fun abrirFormularioActualizar(proveedor: Proveedor) {
+        val intent = Intent(this, ActualizarProveedorActivity::class.java).apply {
+            putExtra("PROVEEDOR", proveedor)  // Pasa el objeto completo de proveedor
+            putExtra("TOKEN", token)  // Pasa el token
+        }
+        startActivity(intent)
+    }
+
+
     private fun abrirInsertarProveedor() {
         val intent = Intent(this, InsertarProveedorActivity::class.java)
         intent.putExtra("TOKEN", token)
         startActivity(intent)
     }
 
-    private fun abrirActualizarProveedor() {
-        val intent = Intent(this, ActualizarProveedorActivity::class.java)
-        intent.putExtra("TOKEN", token)
-        startActivity(intent)
-    }
-
-    private fun eliminarProveedor(id: Int) {
+    private fun eliminarProveedor(id: String) {
         token?.let {
-            val call = MicroservicioRetrofitClient.instance.eliminarProveedor("Bearer $it", id)
-            call.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        mostrarError("Proveedor eliminado correctamente")
-                        obtenerProveedores(it) // Refrescar la lista
-                    } else {
-                        mostrarError("Error al eliminar: ${response.errorBody()?.string()}")
-                    }
-                }
+            // Convertir el id de String a Int
+            val idProveedorInt = id.toIntOrNull()  // Usamos toIntOrNull() por si el ID no es un número válido
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    mostrarError("Error de conexión: ${t.message}")
-                }
-            })
+            if (idProveedorInt != null) {
+                val call = MicroservicioRetrofitClient.instance.eliminarProveedor("Bearer $it", idProveedorInt)
+                call.enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            mostrarError("Proveedor eliminado correctamente")
+                            obtenerProveedores(it)
+                        } else {
+                            mostrarError("Error al eliminar: ${response.errorBody()?.string()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        mostrarError("Error de conexión: ${t.message}")
+                    }
+                })
+            } else {
+                mostrarError("ID de proveedor no válido")
+            }
         } ?: mostrarError("Error: No se recibió el token.")
     }
 
     private fun mostrarError(mensaje: String) {
-        tvBienvenida.text = mensaje
+        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
     }
 
     override fun onBackPressed() {

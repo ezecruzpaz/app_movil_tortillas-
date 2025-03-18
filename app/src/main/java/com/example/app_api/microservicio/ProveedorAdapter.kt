@@ -12,9 +12,9 @@ import com.example.app_api.R
 import com.example.app_api.microservicio_nuevo.Proveedor
 
 class ProveedorAdapter(
-
-private val proveedores: List<Proveedor>,
-private val onEliminarClickListener: (Proveedor) -> Unit // Función lambda para manejar la eliminación
+    private val proveedores: List<Proveedor>,
+    private val onEliminarClickListener: (Proveedor) -> Unit, // Función lambda para manejar la eliminación
+    private val onActualizarClickListener: (Proveedor) -> Unit // Nueva función lambda para manejar la actualización
 ) : RecyclerView.Adapter<ProveedorAdapter.ProveedorViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProveedorViewHolder {
@@ -40,6 +40,7 @@ private val onEliminarClickListener: (Proveedor) -> Unit // Función lambda para
         private val tvProductoPrincipal: TextView = itemView.findViewById(R.id.tvProductoPrincipal)
         private val tvEstado: TextView = itemView.findViewById(R.id.tvEstado)
         private val btnEliminar: ImageButton = itemView.findViewById(R.id.btnEliminar)
+        private val btnActualizar: ImageButton = itemView.findViewById(R.id.btnActualizar) // Nuevo botón de actualizar
 
         fun bind(proveedor: Proveedor) {
             tvNombre.text = "Nombre: ${proveedor.nombre_proveedor}"
@@ -51,9 +52,14 @@ private val onEliminarClickListener: (Proveedor) -> Unit // Función lambda para
             tvProductoPrincipal.text = "Producto Principal: ${proveedor.producto_principal}"
             tvEstado.text = "Estado: ${proveedor.estado}"
 
-            // Configurar el clic del botón de basura
+            // Configurar el clic del botón de eliminar
             btnEliminar.setOnClickListener {
                 mostrarDialogoConfirmacion(proveedor, itemView.context)
+            }
+
+            // Configurar el clic del botón de actualizar
+            btnActualizar.setOnClickListener {
+                onActualizarClickListener(proveedor) // Llamar a la función de actualización
             }
         }
 
