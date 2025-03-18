@@ -6,6 +6,6 @@ data class LoginRequest(
 )
 
 data class LoginResponse(
-    val access_token: String,
-    val token_type: String
+    val accessToken: String,
+    val tokenType: String
 )

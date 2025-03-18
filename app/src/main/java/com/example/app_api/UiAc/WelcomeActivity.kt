@@ -110,12 +110,11 @@ class WelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
 
     private fun obtenerProveedores(token: String) {
         val call = MicroservicioRetrofitClient.instance.obtenerProveedores("Bearer $token")
-
         call.enqueue(object : Callback<ProveedorResponse> {
             override fun onResponse(call: Call<ProveedorResponse>, response: Response<ProveedorResponse>) {
                 if (response.isSuccessful) {
                     val proveedores = response.body()?.proveedores
-                    if (proveedores != null && proveedores.isNotEmpty()) {
+                    if (!proveedores.isNullOrEmpty()) {
                         mostrarProveedores(proveedores)
                     } else {
                         mostrarError("No se encontraron proveedores.")
@@ -130,6 +129,7 @@ class WelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
             }
         })
     }
+
 
     private fun mostrarProveedores(proveedores: List<Proveedor>) {
         val adapter = ProveedorAdapter(
