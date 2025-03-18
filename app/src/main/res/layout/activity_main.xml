@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:gravity="center"
         android:padding="20dp"
-        android:background="@android:color/white">
+        android:background="@color/white">
 
         <ImageView
             android:layout_width="150dp"
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Usuario"
-            app:startIconDrawable="@android:drawable/ic_menu_myplaces"
+            app:startIconDrawable="@drawable/usuario"
             app:boxStrokeColor="@color/strong_orange"
             app:boxStrokeWidthFocused="2dp">
 
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:hint="Contraseña"
             app:startIconDrawable="@android:drawable/ic_lock_lock"
-            app:boxStrokeColor="@color/strong_orange"
+            app:boxStrokeColor="@color/colorAccent"
             app:boxStrokeWidthFocused="2dp">
 
             <com.google.android.material.textfield.TextInputEditText

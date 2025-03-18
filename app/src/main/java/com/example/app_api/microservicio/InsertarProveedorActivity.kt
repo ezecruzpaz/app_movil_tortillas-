@@ -1,13 +1,17 @@
 package com.example.app_api.ui
 
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.app_api.R
@@ -57,6 +61,16 @@ class InsertarProveedorActivity : AppCompatActivity(), NavigationView.OnNavigati
         // Configurar el NavigationView
         navigationView.setNavigationItemSelectedListener(this)
 
+        // Ocultar la barra de título
+        supportActionBar?.hide()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            window.statusBarColor = Color.WHITE
+        } else {
+            // Para versiones anteriores a Android 6.0 (Marshmallow)
+            window.statusBarColor = ContextCompat.getColor(this, android.R.color.white)
+        }
         // Configurar el Spinner
         configurarSpinnerEstado()
 

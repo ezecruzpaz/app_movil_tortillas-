@@ -25,6 +25,7 @@ import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import cn.pedant.SweetAlert.SweetAlertDialog
 
 class WelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -159,32 +160,82 @@ class WelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
     }
 
     private fun eliminarProveedor(id: String) {
-        token?.let {
-            // Convertir el id de String a Int
-            val idProveedorInt = id.toIntOrNull()  // Usamos toIntOrNull() por si el ID no es un número válido
+        token?.let { token ->
+            val idProveedorInt = id.toIntOrNull()
 
             if (idProveedorInt != null) {
-                val call = MicroservicioRetrofitClient.instance.eliminarProveedor("Bearer $it", idProveedorInt)
-                call.enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (response.isSuccessful) {
-                            mostrarError("Proveedor eliminado correctamente")
-                            obtenerProveedores(it)
-                        } else {
-                            mostrarError("Error al eliminar: ${response.errorBody()?.string()}")
-                        }
-                    }
+                // Primer SweetAlertDialog: Confirmación de eliminación
+                SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("¿Eliminar proveedor?")
+                    .setContentText("¿Deseas eliminar este proveedor?")
+                    .setConfirmText("Eliminar")
+                    .setCancelText("Cancelar")
+                    .setConfirmClickListener { dialog ->
+                        dialog.dismissWithAnimation() // Cierra el diálogo de confirmación
 
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                        mostrarError("Error de conexión: ${t.message}")
+                        // Llamada a la API para eliminar
+                        val call = MicroservicioRetrofitClient.instance.eliminarProveedor("Bearer $token", idProveedorInt)
+                        call.enqueue(object : Callback<Void> {
+                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                if (response.isSuccessful) {
+                                    // Segundo SweetAlertDialog: Éxito al eliminar
+                                    SweetAlertDialog(this@WelcomeActivity, SweetAlertDialog.SUCCESS_TYPE)
+                                        .setTitleText("Eliminado")
+                                        .setContentText("Proveedor eliminado correctamente")
+                                        .setConfirmClickListener { successDialog ->
+                                            successDialog.dismissWithAnimation() // Cierra el diálogo de éxito
+                                            obtenerProveedores(token) // Actualiza la lista de proveedores
+                                        }
+                                        .show()
+                                } else {
+                                    // Segundo SweetAlertDialog: Error al eliminar
+                                    SweetAlertDialog(this@WelcomeActivity, SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Error")
+                                        .setContentText("Error al eliminar: ${response.errorBody()?.string()}")
+                                        .setConfirmClickListener { errorDialog ->
+                                            errorDialog.dismissWithAnimation() // Cierra el diálogo de error
+                                        }
+                                        .show()
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                // Segundo SweetAlertDialog: Error de conexión
+                                SweetAlertDialog(this@WelcomeActivity, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Error de conexión")
+                                    .setContentText(t.message)
+                                    .setConfirmClickListener { errorDialog ->
+                                        errorDialog.dismissWithAnimation() // Cierra el diálogo de error
+                                    }
+                                    .show()
+                            }
+                        })
                     }
-                })
+                    .setCancelClickListener { dialog ->
+                        dialog.dismissWithAnimation() // Cierra el diálogo si el usuario cancela
+                    }
+                    .show()
             } else {
-                mostrarError("ID de proveedor no válido")
+                // SweetAlertDialog: ID no válido
+                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Error")
+                    .setContentText("ID de proveedor no válido")
+                    .setConfirmClickListener { dialog ->
+                        dialog.dismissWithAnimation() // Cierra el diálogo
+                    }
+                    .show()
             }
-        } ?: mostrarError("Error: No se recibió el token.")
+        } ?: run {
+            // SweetAlertDialog: Token no recibido
+            SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                .setTitleText("Error")
+                .setContentText("No se recibió el token")
+                .setConfirmClickListener { dialog ->
+                    dialog.dismissWithAnimation() // Cierra el diálogo
+                }
+                .show()
+        }
     }
-
     private fun mostrarError(mensaje: String) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
     }
